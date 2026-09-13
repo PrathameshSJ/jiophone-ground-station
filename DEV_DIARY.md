@@ -448,12 +448,31 @@
      * Purged temporary `__pycache__` artifacts.
      * Initialized local Git repository (`git init`) and prepared clean commit.
 
+### Entry 23: One-Click Camera Switcher (Soft L) & Balanced 3-Column Control Deck
+* **Date/Time**: 2026-09-13 19:45 IST
+* **Context**: User requested adding an instant 1-click button to switch cameras (sending Soft Left keycode 510 to `/dev/input/event0`), moving all top action buttons below the temperature telemetry stack, and arranging the bottom control deck into a 3-column layout: all shortcut buttons to the left, virtual keypad to the right, and the PC typing bridge text box shrunk in between.
+* **Implementation Details**:
+  1. **One-Click Camera Switcher**:
+     * Integrated `switchCamera()` calling `/api/keypad/press?code=510` (Soft Left).
+     * In `cam_app/app.js`, key 510 toggles between rear (`0`) and front (`1`) Qualcomm sensors.
+     * Added **"📷 Switch Cam (Soft L)"** buttons in both the Action Shortcuts panel and the optical viewfinder toolbar.
+  2. **Top Header Simplification**:
+     * Removed the action buttons (`Launch Cam App`, `Screen OFF`, `Scan Subnet`) from the header.
+     * Preserved clean title, hardware chips, telemetry polling interval controls, and live connection status.
+  3. **3-Column Control Deck (Left: Shortcuts, Center: Typing Bridge, Right: Keypad)**:
+     * **Column 1 (Left - 340px)**: Action Shortcuts Card (Launch App, Switch Camera, Screen Power, Scan Subnet, Kill/Restart GUI, Strip/Restore Daemons) positioned directly beneath the left telemetry stack.
+     * **Column 2 (Center - 1fr)**: Interactive PC Typing Bridge shrunk to fit the center column, complete with T9 translation and keystroke transmission log.
+     * **Column 3 (Right - 270px)**: Virtual Remote Keypad positioned directly beneath the optical viewfinder on the right.
+  4. **Live Verification**:
+     * Verified HTTP 200 responses from `/api/keypad/press?code=510`.
+     * Verified live browser frame streaming over port 8000.
+
 ---
 
 ## File Manifest in `~/jio` (`C:\Users\admin\jio`)
 1. [`README.md`](README.md): Master hardware, firmware, network, and step-by-step setup documentation.
 2. [`.gitignore`](.gitignore): Clean exclusion rules for bytecode, recordings, and environment logs.
-3. [`DEV_DIARY.md`](DEV_DIARY.md): Chronological dev diary documenting all 22 engineering entries.
+3. [`DEV_DIARY.md`](DEV_DIARY.md): Chronological dev diary documenting all 23 engineering entries.
 4. [`KEYBOARD_ANALYSIS.md`](KEYBOARD_ANALYSIS.md): Detailed analysis of snap-dome oxidation and kernel debounce timing.
 5. [`BATTERY_ANALYSIS.md`](BATTERY_ANALYSIS.md): Qualcomm BMS fuel gauge registers, internal resistance, and discharge formulas.
 6. [`CAMERA_SUBSYSTEM.md`](CAMERA_SUBSYSTEM.md): Sensor hardware, V4L2 device nodes, and ISP tests.

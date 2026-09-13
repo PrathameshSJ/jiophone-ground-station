@@ -939,13 +939,18 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
-    /* Down-Below Control Deck (Keypad + PC Keyboard Bridge) */
+    /* Down-Below Control Deck: Left: Shortcuts, Center: Text Box, Right: Keypad */
     .bottom-deck {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 18px;
+      grid-template-columns: 340px 1fr 270px;
+      gap: 16px;
+      align-items: stretch;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
+      .bottom-deck { grid-template-columns: 1fr 1fr; }
+      .bridge-card { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
       .bottom-deck { grid-template-columns: 1fr; }
     }
 
@@ -1078,15 +1083,6 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       <span class="chip">KaiOS 2.5</span>
     </div>
     <div class="header-actions">
-      <!-- Remote Launch Button -->
-      <button class="btn btn-primary" onclick="launchAppRemotely()" id="btn-launch-app">
-        🚀 Launch Cam App
-      </button>
-
-      <button class="btn btn-amber" onclick="togglePhoneScreen()" id="btn-screen-pwr">
-        🌑 Screen OFF
-      </button>
-
       <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-subtle); font-size: 12px;">
         <span style="color: var(--text-dim);">Telemetry Rate:</span>
         <input type="number" id="inp-tel-rate" min="0.5" max="30" step="0.5" value="3.5" 
@@ -1098,7 +1094,6 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <button class="btn-pill active" id="pill-tel-35" onclick="setTelemetryInterval(3.5)">3.5s</button>
       </div>
 
-      <button class="btn" onclick="scanSubnet()" id="btn-scan">🔍 Scan Subnet</button>
       <div id="badge-conn" class="badge badge-offline"><span class="pulse-dot"></span> <span id="text-conn">Disconnected</span></div>
     </div>
   </header>
@@ -1189,21 +1184,6 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         </div>
       </div>
 
-      <!-- Card 3: Execution Modes & Power Stripping -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">⚙️ Execution Modes & Optimization</div>
-          <span id="badge-b2g" class="badge badge-online" style="font-size: 11px;">GUI Running</span>
-        </div>
-
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button class="btn btn-danger" onclick="toggleB2G('stop')">Kill GUI (Ultra Eco ~30mA)</button>
-          <button class="btn btn-success" onclick="toggleB2G('start')">Restart GUI</button>
-          <button class="btn btn-primary" onclick="toggleLeanMode('strip')">⚡ Strip 14 BG Daemons</button>
-          <button class="btn" onclick="toggleLeanMode('restore')">↺ Restore Daemons</button>
-        </div>
-      </div>
-
     </div>
 
     <!-- RIGHT HALF: Camera Feed in Main Focus -->
@@ -1235,7 +1215,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
             <div style="font-size: 32px;">📷</div>
             <div><b>Awaiting Live Camera Frame...</b></div>
             <div style="font-size: 12px; color: var(--text-dim);">
-              Click <b style="color: var(--cyan);">"🚀 Launch Cam App"</b> above or open <code style="color: #fff;">http://192.168.1.15/c</code> on phone
+              Click <b style="color: var(--cyan);">"🚀 Launch Cam App"</b> below or open <code style="color: #fff;">http://192.168.1.15/c</code> on phone
             </div>
           </div>
         </div>
@@ -1243,6 +1223,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <!-- Viewfinder Controls Bar -->
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px;">
           <div style="display: flex; align-items: center; gap: 6px;">
+            <button class="btn btn-success" style="padding: 4px 10px; font-size: 11px;" onclick="switchCamera()">📷 Switch Cam</button>
             <button class="btn" style="padding: 4px 10px; font-size: 11px;" onclick="rotateCameraStep()">🔄 Rotate 90°</button>
             <button class="btn-pill active" id="rot-btn-0" onclick="setCameraRotation(0)">0°</button>
             <button class="btn-pill" id="rot-btn-90" onclick="setCameraRotation(90)">90°</button>
@@ -1321,17 +1302,87 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 
   </div>
 
-  <!-- DOWN-BELOW CONTROL DECK: Keypad & PC Keyboard Bridge -->
+  <!-- DOWN-BELOW CONTROL DECK: Left: Shortcuts, Center: Text Box, Right: Keypad -->
   <div class="bottom-deck">
     
-    <!-- Virtual Keypad Column -->
+    <!-- Column 1 (Left): All Shortcut & System Control Buttons (Directly below Thermals) -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">🎮 Remote Keypad</div>
-        <span id="badge-lcd-status" class="badge badge-online" style="font-size: 11px;">LCD ON</span>
+        <div class="card-title">⚡ Action Shortcuts</div>
+        <span class="hud-tag" style="color: var(--cyan);">Device Controls</span>
       </div>
 
-      <div class="keypad-grid">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button class="btn btn-primary" onclick="launchAppRemotely()" id="btn-launch-app" style="grid-column: 1 / -1; justify-content: center; padding: 9px;">
+          🚀 Launch Cam App
+        </button>
+
+        <button class="btn btn-success" onclick="switchCamera()" id="btn-switch-cam" style="justify-content: center; padding: 8px 6px; font-size: 11px;">
+          📷 Switch Cam (Soft L)
+        </button>
+
+        <button class="btn btn-amber" onclick="togglePhoneScreen()" id="btn-screen-pwr" style="justify-content: center; padding: 8px 6px; font-size: 11px;">
+          🌑 Screen OFF
+        </button>
+
+        <button class="btn" onclick="scanSubnet()" id="btn-scan" style="grid-column: 1 / -1; justify-content: center; padding: 7px; font-size: 11px;">
+          🔍 Scan Subnet for Phone
+        </button>
+
+        <button class="btn btn-danger" onclick="toggleB2G('stop')" style="justify-content: center; padding: 8px 4px; font-size: 11px;">
+          Kill GUI (Eco)
+        </button>
+
+        <button class="btn btn-success" onclick="toggleB2G('start')" style="justify-content: center; padding: 8px 4px; font-size: 11px;">
+          Restart GUI
+        </button>
+
+        <button class="btn btn-primary" onclick="toggleLeanMode('strip')" style="justify-content: center; padding: 8px 4px; font-size: 11px;">
+          ⚡ Strip 14 Daemons
+        </button>
+
+        <button class="btn" onclick="toggleLeanMode('restore')" style="justify-content: center; padding: 8px 4px; font-size: 11px;">
+          ↺ Restore Daemons
+        </button>
+      </div>
+    </div>
+
+    <!-- Column 2 (Center): Interactive PC Keyboard Bridge (Shrunk to fit in between) -->
+    <div class="card bridge-box bridge-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div class="card-header">
+          <div class="card-title">⌨️ Interactive PC Typing Bridge</div>
+          <span class="badge badge-online" style="font-size: 10px; padding: 3px 8px;">Active</span>
+        </div>
+        <p style="font-size: 11px; color: var(--text-muted); margin: 6px 0 8px; line-height: 1.4;">
+          Type with your physical keyboard. Keystrokes map to T9 sequences on phone.
+        </p>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="pc-key-input" class="bridge-input" placeholder="Click here and type directly..." autocomplete="off" style="padding: 10px 12px; font-size: 14px;">
+          <button class="btn" onclick="clearBridgeInput()" style="padding: 6px 12px;">Clear</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button class="btn btn-pill" onclick="sendKey(28)">Enter (OK)</button>
+          <button class="btn btn-pill" onclick="sendKey(116)">Backspace (DEL)</button>
+          <button class="btn btn-pill" onclick="sendKey(11)">Space ('0')</button>
+        </div>
+        <div class="bridge-log" id="bridge-log-txt" style="height: 32px; font-size: 11px; padding: 6px 10px;">
+          Ready for typing input...
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3 (Right): Virtual Keypad Column -->
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="card-header">
+        <div class="card-title">🎮 Remote Keypad</div>
+        <span id="badge-lcd-status" class="badge badge-online" style="font-size: 10px; padding: 3px 8px;">LCD ON</span>
+      </div>
+
+      <div class="keypad-grid" style="margin: 4px auto;">
         <button class="key-btn" onclick="sendKey(510)">Soft L</button>
         <button class="key-btn" onclick="sendKey(103)">▲ Up</button>
         <button class="key-btn" onclick="sendKey(511)">Soft R</button>
@@ -1361,27 +1412,6 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <button class="key-btn" onclick="sendKey(228)">#</button>
       </div>
       <div id="key-ack-txt" style="text-align: center; font-size: 11px; color: var(--green); height: 14px; font-family: monospace;"></div>
-    </div>
-
-    <!-- Interactive PC Keyboard Bridge Column -->
-    <div class="card bridge-box">
-      <div class="card-header">
-        <div class="card-title">⌨️ Interactive PC Keyboard Input Bridge</div>
-        <span class="badge badge-online" style="font-size: 11px;">Bridge Listening</span>
-      </div>
-
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 2px;">
-        Click into the box below. PC keystrokes (Letters, Numbers, Space, Backspace, Enter, Arrow Keys) route directly to JioPhone input events.
-      </p>
-
-      <div style="display: flex; gap: 10px;">
-        <input type="text" id="pc-key-input" class="bridge-input" placeholder="Click here and type directly from your physical keyboard..." autocomplete="off">
-        <button class="btn" onclick="clearBridgeInput()">Clear</button>
-      </div>
-
-      <div class="bridge-log" id="bridge-log-txt">
-        Ready for typing input...
-      </div>
     </div>
 
   </div>
@@ -1890,6 +1920,11 @@ DASHBOARD_HTML = """<!DOCTYPE html>
           btn.innerText = '🚀 Launch Cam App';
           showToast('Error sending launch command: ' + err, 'error');
         });
+    }
+
+    function switchCamera() {
+      sendKey(510);
+      showToast('Switched Camera (Soft L sent to device)', 'info');
     }
 
     let phoneScreenState = true;
