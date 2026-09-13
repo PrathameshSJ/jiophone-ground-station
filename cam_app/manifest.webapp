@@ -1,0 +1,33 @@
+{
+  "version": "1.0.1",
+  "name": "Live Camera",
+  "description": "JioPhone Live Camera Streamer to PC",
+  "type": "certified",
+  "launch_path": "/index.html",
+  "icons": {
+    "56": "/icon56.png",
+    "112": "/icon112.png"
+  },
+  "developer": {
+    "name": "Antigravity",
+    "url": "http://192.168.1.15:8000"
+  },
+  "permissions": {
+    "camera": {
+      "description": "Required to access camera hardware"
+    },
+    "systemXHR": {
+      "description": "Required to send frames over LAN to PC"
+    },
+    "softkey": {},
+    "power": {
+      "description": "Control screen brightness and backlight blackout"
+    },
+    "device-storage:sdcard": {
+      "access": "readwrite"
+    }
+  },
+  "default_locale": "en-US",
+  "fullscreen": true,
+  "orientation": "portrait-primary"
+}

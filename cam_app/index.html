@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Live Camera</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="header">
+    <span>📷 Live Camera</span>
+    <span id="cam-name">Rear</span>
+  </div>
+
+  <div id="stream-container">
+    <video id="v" autoplay playsinline muted></video>
+    <canvas id="c"></canvas>
+    <div id="overlay-status">Starting...</div>
+  </div>
+
+  <div id="footer">
+    <span class="sk">Switch</span>
+    <span class="sk" id="sk-center">Stream</span>
+    <span class="sk">Exit</span>
+  </div>
+</body>
+</html>

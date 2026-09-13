@@ -1,0 +1,23 @@
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Video recordings & chunk dumps
+*.webm
+*.mp4
+*.mkv
+recordings/
+
+# Logs & temporary run files
+*.log
+*.tmp
+*.bak
+
+# Environment & Editor artifacts
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
