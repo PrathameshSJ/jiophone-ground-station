@@ -467,12 +467,23 @@
      * Verified HTTP 200 responses from `/api/keypad/press?code=510`.
      * Verified live browser frame streaming over port 8000.
 
+### Entry 24: Remote GitHub Repository Deployment (`jiophone-ground-station`)
+* **Date/Time**: 2026-09-13 20:44 IST
+* **Context**: User designated the GitHub remote repository `https://github.com/PrathameshSJ/jiophone-ground-station` to push the project codebase.
+* **Implementation Details**:
+  1. Configured git remote origin:
+     `git remote add origin https://github.com/PrathameshSJ/jiophone-ground-station.git`
+  2. Pushed the full commit history and tracked branches to GitHub:
+     * Branch `master`: `git push -u origin master`
+     * Branch `main`: `git push -u origin main`
+  3. Verified both branches are synchronized and live on GitHub.
+
 ---
 
 ## File Manifest in `~/jio` (`C:\Users\admin\jio`)
 1. [`README.md`](README.md): Master hardware, firmware, network, and step-by-step setup documentation.
 2. [`.gitignore`](.gitignore): Clean exclusion rules for bytecode, recordings, and environment logs.
-3. [`DEV_DIARY.md`](DEV_DIARY.md): Chronological dev diary documenting all 23 engineering entries.
+3. [`DEV_DIARY.md`](DEV_DIARY.md): Chronological dev diary documenting all 24 engineering entries.
 4. [`KEYBOARD_ANALYSIS.md`](KEYBOARD_ANALYSIS.md): Detailed analysis of snap-dome oxidation and kernel debounce timing.
 5. [`BATTERY_ANALYSIS.md`](BATTERY_ANALYSIS.md): Qualcomm BMS fuel gauge registers, internal resistance, and discharge formulas.
 6. [`CAMERA_SUBSYSTEM.md`](CAMERA_SUBSYSTEM.md): Sensor hardware, V4L2 device nodes, and ISP tests.
